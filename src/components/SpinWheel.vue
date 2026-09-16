@@ -1,7 +1,7 @@
 <template>
   <div
     id="group-dropdown"
-    class="z-1 w-full flex justify-content-center align-items-center text-center text-base sm:text-3xl md:text-5xl font-bold"
+    class="z-1 w-full flex justify-content-center align-items-center text-center text-base sm:text-5xl md:text-6xl font-bold"
   >
     {{ GroupLabel }}
   </div>

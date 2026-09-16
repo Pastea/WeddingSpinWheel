@@ -10,8 +10,8 @@
   </ConfirmPopup>
   <div class="h-screen w-screen overflow-hidden flex flex-column">
     <div class="max-w-screen h-full overflow-hidden flex flex-column">
-      <div class="grid header text-center mt-2">
-        <h1 class="col-12 mb-0 text-3xl sm:text-4xl md:text-5xl">
+      <div class="grid header text-center">
+        <h1 class="col-12 mt-0 mb-0 text-4xl sm:text-5xl md:text-6xl">
          <span
             class="white-space-nowrap"
             >{{ PageTitle }}</span
