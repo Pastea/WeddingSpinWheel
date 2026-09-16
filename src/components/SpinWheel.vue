@@ -254,6 +254,16 @@ onMounted(() => {
     if (!wheel) return;
     playSound();
 
+    // Simulate physical resistance (kinetic energy loss) when hitting the wood pin
+    const currentSpeed = (wheel as any)._rotationSpeed;
+    if (Math.abs(currentSpeed) > 0) {
+      let newSpeed = currentSpeed * 0.99 - Math.sign(currentSpeed) * 2;
+      if (Math.sign(newSpeed) !== Math.sign(currentSpeed)) {
+        newSpeed = 0; // Prevent the resistance from spinning it backwards
+      }
+      (wheel as any)._rotationSpeed = newSpeed;
+    }
+
     const delta = wheel.rotation - lastRotation;
     if (wheel.rotationSpeed > 50 || delta > 2) {
        pointerAngle = -20;
@@ -274,10 +284,10 @@ onMounted(() => {
         wheel.rotationResistance = -100;
         break;
       case Math.abs(wheel.rotationSpeed) < 800:
-        wheel.rotationResistance = -300;
+        wheel.rotationResistance = -200;
         break;
       default:
-        wheel.rotationResistance = -1000;
+        wheel.rotationResistance = -400;
     }
   };
 
