@@ -8,34 +8,24 @@
       </div>
     </template>
   </ConfirmPopup>
-  <ScrollPanel class="h-screen">
-    <div class="max-w-screen overflow-x-hidden overflow-y-hidden">
-      <div class="grid header text-center">
-        <h1 class="col-12 mb-0 text-4xl sm:text-5xl md:text-6xl">
-          <span v-if="!Fairmode">Unfair</span><span v-else>Fair</span>&nbsp;<span
+  <div class="h-screen w-screen overflow-hidden flex flex-column">
+    <div class="max-w-screen h-full overflow-hidden flex flex-column">
+      <div class="grid header text-center mt-2">
+        <h1 class="col-12 mb-0 text-3xl sm:text-4xl md:text-5xl">
+         <span
             class="white-space-nowrap"
-            >Spin Wheel</span
+            >{{ PageTitle }}</span
           >
         </h1>
-        <p class="col-12 my-0 py-0 text-base sm:text-lg md:text-2xl" v-if="!Fairmode">
-          <span class="white-space-nowrap">The world is unfair,</span>&nbsp;<span
-            class="white-space-nowrap"
-            >and so is our spin wheel.</span
-          >
-        </p>
-        <p class="col-12 my-0 py-0 text-base sm:text-lg md:text-2xl" v-else>
-          <span class="white-space-nowrap">Though the world is unfair,</span>&nbsp;<span
-            class="white-space-nowrap"
-            >fortune smiles on our spin wheel.</span
-          >
+        <p class="col-12 my-0 py-0 text-xs sm:text-sm md:text-lg">
+          <span class="white-space-nowrap">{{ PageDescription }}</span>
         </p>
       </div>
-      <div class="flex flex-wrap justify-content-center mb-4">
+      <div class="flex flex-column align-items-center flex-grow-1 overflow-visible">
         <SpinWheel></SpinWheel>
       </div>
     </div>
-    <Footer></Footer>
-  </ScrollPanel>
+  </div>
 
   <SidebarPanel></SidebarPanel>
   <Button
@@ -96,7 +86,7 @@ import { inject, onMounted, ref } from 'vue';
 import { VisibleSidebar, type SidebarService } from '@/services/SidebarService';
 import { ItemService, GroupLabels } from '@/services/ItemService';
 import { StringHelper } from '@/helpers/StringHelper';
-import { Fairmode } from '@/services/SettingService';
+import { PageTitle, PageDescription } from '@/services/PageService';
 
 declare global {
   interface Navigator {
@@ -157,7 +147,7 @@ onMounted(async () => {
   } else if (navigator.userAgent.indexOf('OBS') > 0) {
     // Don't track in OBS mode to reduce performance impact
     window.gtag = () => {};
-  } else if (import.meta.env.PROD) {
+  } else if (import.meta.env.PROD && navigator.onLine) {
     // Setup Cloudflare RUM (Real User Measurements)
     if (import.meta.env.VITE_CLOUDFLARE_RUM_TOKEN) {
       (function (token) {
@@ -218,6 +208,9 @@ onMounted(async () => {
       undefined,
       undefined
     );
+  } else {
+    // Fallback for offline mode so gtag doesn't throw errors
+    window.gtag = () => {};
   }
 
   const params = new URLSearchParams(window.location.search);

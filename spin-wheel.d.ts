@@ -122,7 +122,7 @@ declare module 'spin-wheel' {
     getAngleFromCenter(point?: { x: number; y: number }): number;
     getCurrentIndex(): number;
     refreshCurrentIndex(angles?: number[]): void;
-    getItemAngles(initialRotation?: number): number[];
+    getItemAngles(initialRotation?: number): { start: number; end: number }[];
     refresh(): void;
     limitSpeed(speed?: number, max?: number): number;
     beginSpin(speed?: number, spinMethod?: string): void;

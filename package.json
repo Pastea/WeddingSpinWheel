@@ -15,6 +15,7 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false"
   },
   "dependencies": {
+    "@fontsource/rock-salt": "^5.3.0",
     "@primevue/themes": "^4.5.4",
     "csv": "^6.6.3",
     "events": "^3.3.0",

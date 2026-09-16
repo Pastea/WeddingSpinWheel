@@ -109,6 +109,23 @@ Full instructions
 5. And finally, when you're ready, just give the wheel a good spin by clicking on it.
 6. Enjoy the game!
 
+## 🖥️ Running Locally (Offline Mode)
+
+You can run this application entirely offline directly from your local file system (without setting up a local web server), bypassing standard browser CORS/Same-Origin Policy restrictions.
+
+We provide dedicated launch scripts for Windows, macOS, and Linux that will automatically build the project if needed, configure an isolated browser profile with security overrides, and launch the built application safely:
+
+### 🌐 Google Chrome (Chromium)
+- **Windows**: Run `run-chrome.bat` (or double-click it in File Explorer).
+- **macOS / Linux**: Run `./run-chrome.sh` in your terminal.
+
+### 🦊 Mozilla Firefox
+- **Windows**: Run `run-firefox.bat` (or double-click it in File Explorer).
+- **macOS / Linux**: Run `./run-firefox.sh` in your terminal.
+
+> [!NOTE]
+> These scripts launch the browser using isolated profiles (safely cached inside `node_modules/.cache`) to prevent security overrides from affecting your primary browser profile, history, or active sessions.
+
 ## 📎 Usage scenarios
 
 ### What's for dinner?

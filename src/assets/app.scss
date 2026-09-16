@@ -1,3 +1,78 @@
+@import '@fontsource/rock-salt';
+
+@font-face {
+  font-family: 'Jua';
+  src: url('/fonts/Jua.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mitr';
+  src: url('/fonts/Mitr.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Mochiy Pop P One';
+  src: url('/fonts/MochiyPopPOne.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Color Emoji';
+  src: url('/fonts/NotoColorEmoji.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Lao';
+  src: url('/fonts/NotoSansLao.ttf') format('truetype');
+  font-weight: 400;
+  font-stretch: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans SC';
+  src: url('/fonts/NotoSansSC.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans TC';
+  src: url('/fonts/NotoSansTC.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Suez One';
+  src: url('/fonts/SuezOne.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Unbounded';
+  src: url('/fonts/Unbounded.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
   // Should also change SpinWheel.vue
   --font-family:
@@ -9,10 +84,8 @@ body {
 
   $background-color: #212f56;
 
-  background: $background-color;
-  background: -moz-radial-gradient(center, circle cover, $background-color 0%, #000000 100%);
-  background: -webkit-radial-gradient(center, circle cover, $background-color 0%, #000000 100%);
-  background: radial-gradient(circle at center, $background-color 0%, #000000 100%);
+  background: url('../img/background.jpeg') no-repeat center center;
+  background-size: cover;
   background-attachment: fixed;
 
   margin: 0;
@@ -154,4 +227,12 @@ body {
 .p-slider.p-slider-horizontal {
   width: calc(100% - var(--p-slider-handle-width));
   margin-inline: calc(var(--p-slider-handle-width) / 2);
+}
+
+// Hide the PrimeUI / PrimeVue invalid license watermark overlay
+div[style*='z-index: 99999'],
+#p-license-host,
+div:has(a[href*='primeui.dev']),
+div:has(a[href*='primevue.org']) {
+  display: none !important;
 }

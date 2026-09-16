@@ -26,7 +26,7 @@ const playSound = () => {
 
   const src = CongratulationSound.value.value.startsWith('data:')
     ? CongratulationSound.value.value
-    : `/sound/${CongratulationSound.value.value}`;
+    : `./sound/${CongratulationSound.value.value}`;
   const audio = new Audio(src);
   audio.volume = 0.7;
   audio.play();

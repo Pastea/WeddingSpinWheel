@@ -86,7 +86,7 @@ export class SettingService {
     if (!audioSetting) return;
     if (audioSetting.value.startsWith('data:')) return;
 
-    const src = `/sound/${audioSetting.value}`;
+    const src = `./sound/${audioSetting.value}`;
 
     // const hint = document.createElement('link');
     // hint.rel = 'prefetch';

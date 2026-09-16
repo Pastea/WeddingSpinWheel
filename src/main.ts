@@ -1,20 +1,6 @@
 /* eslint-disable vue/multi-word-component-names */
 /* eslint-disable vue/no-reserved-component-names */
 
-/*
- * I have noticed that there are malicious individuals who steal our website content and add malicious code to collect user location and send back to the their own server.
- * To protect against such actions, we will implement a mechanism to verify the host when the webpage is being loaded, and if necessary, redirect users to the appropriate website when they access the proxy site.
- * Please be aware that you are solely permitted to distribute this project under the "AGPL-3.0" license.
- * If you have adhered to the terms of this license, you are welcome to make modifications to this section as needed.
- */
-if (
-  !window.location.hostname.endsWith('spin-wheel.click') &&
-  window.location.hostname !== 'localhost'
-) {
-  window.location.href =
-    'https://unfair.spin-wheel.click' + window.location.pathname + window.location.search;
-}
-
 import { createApp } from 'vue';
 import App from '@/App.vue';
 import PrimeVue, { type PrimeVueConfiguration } from 'primevue/config';
@@ -76,8 +62,6 @@ import SpinWheel from '@/components/SpinWheel.vue';
 import ItemInputGroup from '@/components/sidebar-panel/ItemInputGroup.vue';
 import SidebarPanel from '@/components/sidebar-panel/SidebarPanel.vue';
 import CongratulationDialog from '@/components/CongratulationDialog.vue';
-import Footer from '@/components/Footer.vue';
-import ShareLink from '@/components/ShareLink.vue';
 import { ItemService } from '@/services/ItemService';
 import { SidebarService } from '@/services/SidebarService';
 import { SettingService } from '@/services/SettingService';
@@ -156,7 +140,10 @@ app.component('SpinWheel', SpinWheel);
 app.component('ItemInputGroup', ItemInputGroup);
 app.component('SidebarPanel', SidebarPanel);
 app.component('CongratulationDialog', CongratulationDialog);
-app.component('Footer', Footer);
-app.component('ShareLink', ShareLink);
 
 app.mount('#app');
+
+if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
+  const { registerSW } = await import('virtual:pwa-register');
+  registerSW({ immediate: true });
+}

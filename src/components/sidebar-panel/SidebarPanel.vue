@@ -133,6 +133,14 @@
           <TabPanel value="settings">
             <div v-focustrap>
               <div class="col-12">
+                <label for="in-pageTitle" class="block mb-2">Page Title</label>
+                <InputText id="in-pageTitle" v-model="PageTitle" class="w-full" />
+              </div>
+              <div class="col-12">
+                <label for="in-pageDesc" class="block mb-2">Page Description</label>
+                <InputText id="in-pageDesc" v-model="PageDescription" class="w-full" />
+              </div>
+              <div class="col-12">
                 <label for="dd-sound" class="block mb-2">Select a Ticking Sound</label>
                 <div class="grid">
                   <div class="col-8">
@@ -211,6 +219,22 @@
                       itemService.syncItems();
                     }
                   "
+                  :pt="{
+                    root: {
+                      class: 'w-full'
+                    }
+                  }"
+                />
+              </div>
+              <div class="col-12">
+                <label for="btn-fullscreen" class="block mb-2">Fullscreen</label>
+                <ToggleButton
+                  v-model="isFullscreen"
+                  @change="toggleFullscreen"
+                  onLabel="Exit Fullscreen"
+                  offLabel="Enter Fullscreen"
+                  onIcon="pi pi-window-minimize"
+                  offIcon="pi pi-window-maximize"
                   :pt="{
                     root: {
                       class: 'w-full'
@@ -300,6 +324,7 @@ import {
   CongratulationSounds,
   Fairmode
 } from '@/services/SettingService';
+import { PageTitle, PageDescription } from '@/services/PageService';
 import ItemInputGroup from '@/components/sidebar-panel/ItemInputGroup.vue';
 import type { IItem } from '@/interface/IItem';
 import { StringHelper } from '@/helpers/StringHelper';
@@ -328,7 +353,10 @@ watch(VisibleSidebar, (visible) => {
   else document.removeEventListener('keydown', onKeydown);
 });
 
-onUnmounted(() => document.removeEventListener('keydown', onKeydown));
+onUnmounted(() => {
+  document.removeEventListener('keydown', onKeydown);
+  document.removeEventListener('fullscreenchange', handleFullscreenChange);
+});
 
 // The id of the item added last, so that ItemInputGroup can tell the one the
 // user just created from the ones that were already there. Cleared once it has
@@ -460,8 +488,25 @@ const changeBulkEditMode = async () => {
   }
 };
 
+const isFullscreen = ref(false);
+
+const toggleFullscreen = async () => {
+  if (!document.fullscreenElement) {
+    await document.documentElement.requestFullscreen().catch(() => {});
+  } else if (document.exitFullscreen) {
+    await document.exitFullscreen();
+  }
+};
+
+const handleFullscreenChange = () => {
+  isFullscreen.value = !!document.fullscreenElement;
+};
+
 let badCSV: string | undefined = undefined;
 onMounted(() => {
+  isFullscreen.value = !!document.fullscreenElement;
+  document.addEventListener('fullscreenchange', handleFullscreenChange);
+
   watch(GroupLabel, () => {
     renameGroupName.value = GroupLabel.value;
   });

@@ -7,6 +7,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: './',
   build: {
     target: 'es2022',
     sourcemap: true,
@@ -16,11 +17,12 @@ export default defineConfig({
     vue(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', '/img/icons/ios/180.png'],
+      injectRegister: false,
+      includeAssets: ['favicon.ico', 'robots.txt', 'img/**/*', 'sound/**/*', 'fonts/**/*'],
       manifest: {
-        name: 'Unfair Spin Wheel',
-        short_name: 'Unfair Spin Wheel',
-        description: 'The world is unfair, and so is our spin wheel.',
+        name: 'Matrimonio Corrata',
+        short_name: 'Matrimonio Corrata Short Name',
+        description: 'Matrimonio Corrata Description',
         theme_color: '#212f56',
         icons: [
           {
@@ -476,6 +478,34 @@ export default defineConfig({
           {
             src: 'img/icons/ios/1024.png',
             sizes: '1024x1024'
+          }
+        ]
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest,mp3,webp,jpg,jpeg,avif,json,woff,woff2,ttf}'],
+        cleanupOutdatedCaches: true,
+        maximumFileSizeToCacheInBytes: 30 * 1024 * 1024,
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.googleapis\.com/,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'google-fonts-stylesheets'
+            }
+          },
+          {
+            urlPattern: /^https:\/\/fonts\.gstatic\.com/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts-webfonts',
+              expiration: {
+                maxEntries: 30,
+                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
           }
         ]
       }
