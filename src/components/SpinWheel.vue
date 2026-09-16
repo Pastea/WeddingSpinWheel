@@ -196,10 +196,10 @@ const updatePinsImage = () => {
     const size = 16;
     const offset = size / 2;
 
-    ctx.shadowColor = 'rgba(0,0,0,0.5)';
-    ctx.shadowBlur = 4;
-    ctx.shadowOffsetX = 1;
-    ctx.shadowOffsetY = 2;
+    ctx.shadowColor = 'rgba(0,0,0,0.8)';
+    ctx.shadowBlur = 6;
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 4;
     
     for (const a of angles) {
       const rad = (a.start - 90) * Math.PI / 180;
@@ -336,6 +336,7 @@ margin-bottom:1vh;
 :deep(canvas) {
   position: relative;
   z-index: 1;
+  filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.6));
 }
 
 .pointer-container {
@@ -358,12 +359,13 @@ margin-bottom:1vh;
 
   .base-flicker {
     z-index: 0;
+    filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5)) brightness(1.3) contrast(1.15);
   }
 
   .flicker {
     z-index: 11;
     transform-origin: 50% 30%;
-    filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5));
+    filter: drop-shadow(0px 6px 8px rgba(0,0,0,0.6)) brightness(1.3) contrast(1.15);
   }
 }
 
