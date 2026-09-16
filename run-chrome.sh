@@ -4,13 +4,13 @@
 cd "$(dirname "$0")" || exit 1
 
 echo "Checking for build folder..."
-if [ ! -f "dist/index.html" ]; then
-    echo "Build folder (dist/) or index.html missing. Building project..."
-    npm run build
+if [ ! -f "index.html" ]; then
+    echo "index.html missing"
+    exit 1
 fi
 
-TARGET_FILE="$(pwd)/dist/index.html"
-PROFILE_DIR="$(pwd)/node_modules/.cache/chrome-profile"
+TARGET_FILE="$(pwd)/index.html"
+PROFILE_DIR="$(pwd)/.cache/chrome-profile"
 
 mkdir -p "$PROFILE_DIR"
 

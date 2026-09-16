@@ -2,13 +2,13 @@
 setlocal enabledelayedexpansion
 
 echo Checking for build folder...
-if not exist "%~dp0dist\index.html" (
-    echo Build folder (dist/) or index.html missing. Building project...
-    call npm run build
+if not exist "%~dp0index.html" (
+    echo index.html missing. Building project...
+    exit 1
 )
 
-set "TARGET_FILE=%~dp0dist\index.html"
-set "PROFILE_DIR=%~dp0node_modules\.cache\firefox-profile"
+set "TARGET_FILE=%~dp0index.html"
+set "PROFILE_DIR=%~dp0.cache\firefox-profile"
 
 if not exist "%PROFILE_DIR%" (
     mkdir "%PROFILE_DIR%"
