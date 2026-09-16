@@ -46,7 +46,7 @@ patternImg.onload = () => wheel?.refresh();
 
 const properties: WheelProps = {
   // debug: import.meta.env.DEV,
-  isInteractive: false,
+  isInteractive: true,
   radius: 0.48,
   rotationResistance: 0,
   itemLabelRadius: 0.92,
@@ -273,6 +273,11 @@ onMounted(() => {
       case Math.abs(wheel.rotationSpeed) < 400:
         wheel.rotationResistance = -100;
         break;
+      case Math.abs(wheel.rotationSpeed) < 800:
+        wheel.rotationResistance = -300;
+        break;
+      default:
+        wheel.rotationResistance = -1000;
     }
   };
 
