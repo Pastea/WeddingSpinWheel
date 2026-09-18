@@ -20,9 +20,9 @@ export default defineConfig({
       injectRegister: false,
       includeAssets: ['favicon.ico', 'robots.txt', 'img/**/*', 'sound/**/*', 'fonts/**/*'],
       manifest: {
-        name: 'Matrimonio Corrata',
-        short_name: 'Matrimonio Corrata Short Name',
-        description: 'Matrimonio Corrata Description',
+        name: 'WeddingSpinWheel',
+        short_name: 'WeddingSpinWheel',
+        description: 'WeddingSpinWheel',
         theme_color: '#212f56',
         icons: [
           {
