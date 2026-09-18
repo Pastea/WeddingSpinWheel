@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { inject, ref, watch } from 'vue';
-import { ItemService } from '@/services/ItemService';
+import { ItemService, Items } from '@/services/ItemService';
 import { Fairmode } from '@/services/SettingService';
 
 const props = defineProps(['modelValue', 'autoFocus']);
@@ -73,7 +73,16 @@ function updateWeight(value: number) {
 }
 
 function removeItem() {
-  itemService?.removeItem(props.modelValue);
+  if (Items.value && Items.value.length <= 1) {
+    label.value = '';
+    weight.value = 1;
+    const item = props.modelValue;
+    item.label = '';
+    item.weight = 1;
+    itemService?.updateItem(item);
+  } else {
+    itemService?.removeItem(props.modelValue);
+  }
 }
 
 // Only an item the user just added takes focus. Focusing on every mount would

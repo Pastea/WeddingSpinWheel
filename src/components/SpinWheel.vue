@@ -18,9 +18,9 @@
 
     <div
       class="icon"
-      @click="spin"
-      @keyup.enter="spin"
-      @keyup.space="spin"
+      @click="spin($event)"
+      @keyup.enter="spin($event)"
+      @keyup.space="spin($event)"
       v-tooltip.bottom="{
         value: `↻ Spin!`,
         class: 'text-xl',
@@ -36,6 +36,7 @@ import { ref, onMounted, onUnmounted, watch } from 'vue';
 import random from 'random';
 import { Wheel, type WheelProps } from 'spin-wheel';
 import { useDialog } from 'primevue/usedialog';
+import { useConfirm } from 'primevue/useconfirm';
 import { TickSound, LabelLength } from '@/services/SettingService';
 import { GroupLabel, Items } from '@/services/ItemService';
 import CongratulationDialog from '@/components/CongratulationDialog.vue';
@@ -78,6 +79,8 @@ let pointerVelocity = 0;
 let lastRotation = 0;
 let pointerRaf: number | null = null;
 
+const confirm = useConfirm();
+
 const updatePointer = () => {
   if (!wheel) {
     pointerRaf = requestAnimationFrame(updatePointer);
@@ -93,18 +96,20 @@ const updatePointer = () => {
   lastRotation = currentRotation;
   
   let pushAngle = 0;
-  const angles = wheel.getItemAngles(currentRotation);
-  for (const a of angles) {
-    let pinAngle = a.start % 360;
-    if (pinAngle < 0) pinAngle += 360;
-    
-    if (delta >= 0) {
-      if (pinAngle > 352 && pinAngle <= 360) {
-        pushAngle = -((pinAngle - 352) / 8) * 20;
-      }
-    } else {
-      if (pinAngle >= 0 && pinAngle < 8) {
-        pushAngle = ((8 - pinAngle) / 8) * 20;
+  if (wheel.items.length > 1) {
+    const angles = wheel.getItemAngles(currentRotation);
+    for (const a of angles) {
+      let pinAngle = a.start % 360;
+      if (pinAngle < 0) pinAngle += 360;
+      
+      if (delta >= 0) {
+        if (pinAngle > 352 && pinAngle <= 360) {
+          pushAngle = -((pinAngle - 352) / 8) * 20;
+        }
+      } else {
+        if (pinAngle >= 0 && pinAngle < 8) {
+          pushAngle = ((8 - pinAngle) / 8) * 20;
+        }
       }
     }
   }
@@ -149,7 +154,37 @@ const playSound = () => {
   audio.play();
 };
 
-const spin = () => {
+let rapidClickCount = 0;
+let lastClickTime = 0;
+
+const spin = (event?: Event) => {
+  const now = Date.now();
+  if (now - lastClickTime < 500) {
+    rapidClickCount++;
+  } else {
+    rapidClickCount = 1;
+  }
+  lastClickTime = now;
+
+  if (rapidClickCount > 4) {
+    confirm.require({
+      target: event?.currentTarget as HTMLElement | undefined,
+      message: 'LIMITATI',
+      icon: 'pi pi-exclamation-triangle text-red-500 text-3xl',
+      acceptProps: { style: 'display: none' },
+      acceptClass: 'hidden',
+      rejectProps: { style: 'display: none' },
+      rejectClass: 'hidden'
+    });
+    
+    setTimeout(() => {
+      confirm.close();
+    }, 2000);
+
+    rapidClickCount = 0;
+    return;
+  }
+
   if (!wheel) return;
 
   wheel.rotationResistance = -400;
@@ -201,11 +236,13 @@ const updatePinsImage = () => {
     ctx.shadowOffsetX = 2;
     ctx.shadowOffsetY = 4;
     
-    for (const a of angles) {
-      const rad = (a.start - 90) * Math.PI / 180;
-      const cx = 250 + Math.cos(rad) * radius;
-      const cy = 250 + Math.sin(rad) * radius;
-      ctx.drawImage(dowelImg, cx - offset, cy - offset, size, size);
+    if (angles.length > 1) {
+      for (const a of angles) {
+        const rad = (a.start - 90) * Math.PI / 180;
+        const cx = 250 + Math.cos(rad) * radius;
+        const cy = 250 + Math.sin(rad) * radius;
+        ctx.drawImage(dowelImg, cx - offset, cy - offset, size, size);
+      }
     }
     
     const img = new Image();
@@ -231,6 +268,7 @@ onMounted(() => {
         image: patternImg,
         imageScale: 0.2
       }));
+      if (wheel) wheel.lineWidth = (newValue || []).length <= 1 ? 0 : 1;
       updatePinsImage();
     },
     { deep: true }
@@ -243,7 +281,8 @@ onMounted(() => {
   wheel = new Wheel(container.value, {
     ...properties,
     items: Items.value?.map((i) => ({ ...i, image: patternImg, imageScale: 0.2 })) || [],
-    itemLabelRadiusMax: 1 - LabelLength.value
+    itemLabelRadiusMax: 1 - LabelLength.value,
+    lineWidth: (Items.value?.length || 0) <= 1 ? 0 : 1
   });
 
   updatePinsImage();
@@ -292,11 +331,13 @@ onMounted(() => {
   };
 
   wheel.onRest = ($event) => {
+    if (wheel) wheel.isInteractive = true;
     stopAndClearSound();
     openCongratulationDialog($event);
   };
 
   wheel.onSpin = () => {
+    if (wheel) wheel.isInteractive = false;
     gtag('event', 'spin');
     gtag('event', 'spin_count', {
       count: ++spinCount

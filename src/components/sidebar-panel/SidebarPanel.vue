@@ -498,29 +498,27 @@ const changeBulkEditMode = async () => {
   }
 };
 
-const resetData = ($event: Event) => {
-  if ($event.target instanceof HTMLElement) {
-    confirm.require({
-      target: $event.target || undefined,
-      message: 'Are you sure you want to delete all data and revert to default settings? This will reload the page.',
-      icon: 'pi pi-exclamation-triangle text-yellow-400',
-      accept: async () => {
-        resetPageDefaults();
-        localStorage.clear();
-        try {
-          if (window.indexedDB && window.indexedDB.databases) {
-            const dbs = await window.indexedDB.databases();
-            for (const db of dbs) {
-              if (db.name) window.indexedDB.deleteDatabase(db.name);
-            }
+const resetData = () => {
+  confirm.require({
+    message: 'Are you sure you want to delete all data and revert to default settings? This will reload the page.',
+    header: 'Reset Data',
+    icon: 'pi pi-exclamation-triangle text-yellow-400',
+    accept: async () => {
+      resetPageDefaults();
+      localStorage.clear();
+      try {
+        if (window.indexedDB && window.indexedDB.databases) {
+          const dbs = await window.indexedDB.databases();
+          for (const db of dbs) {
+            if (db.name) window.indexedDB.deleteDatabase(db.name);
           }
-        } catch (e) {
-          console.error('Failed to clear IndexedDB:', e);
         }
-        window.location.reload();
+      } catch (e) {
+        console.error('Failed to clear IndexedDB:', e);
       }
-    });
-  }
+      window.location.reload();
+    }
+  });
 };
 
 const isFullscreen = ref(false);
