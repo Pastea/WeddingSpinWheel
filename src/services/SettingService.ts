@@ -69,7 +69,7 @@ export const Fairmode = ref<boolean>(false);
 
 export const HideGroupTitle = ref<boolean>(true);
 
-export const WheelScale = ref<number>(1);
+export const WheelScale = ref<number>(1.1);
 
 export class SettingService {
   private db: PouchDB.Database<ISetting> = new PouchDB('setting');
@@ -245,7 +245,7 @@ export class SettingService {
     try {
       WheelScale.value = (await this.getSetting('wheelScale')).value as number;
     } catch {
-      WheelScale.value = 1;
+      WheelScale.value = 1.1;
       this.addSetting({ key: 'wheelScale', value: WheelScale.value });
     }
 
