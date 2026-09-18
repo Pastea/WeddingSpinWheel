@@ -67,6 +67,8 @@ export const LabelLength = ref<number>(0.75);
 
 export const Fairmode = ref<boolean>(false);
 
+export const HideGroupTitle = ref<boolean>(false);
+
 export class SettingService {
   private db: PouchDB.Database<ISetting> = new PouchDB('setting');
 
@@ -80,6 +82,7 @@ export class SettingService {
     await this.initTickSound();
     await this.initCongratulationSound();
     await this.initFairmode();
+    await this.initHideGroupTitle();
   };
 
   private prefetchAudio = (audioSetting: AudioSetting | undefined) => {
@@ -212,6 +215,25 @@ export class SettingService {
         await this.updateSetting(doc);
       } catch {
         await this.addSetting({ key: 'fairmode', value: newValue });
+      }
+    });
+  }
+
+  async initHideGroupTitle() {
+    try {
+      HideGroupTitle.value = (await this.getSetting('hideGroupTitle')).value as boolean;
+    } catch {
+      HideGroupTitle.value = false;
+      this.addSetting({ key: 'hideGroupTitle', value: false });
+    }
+
+    watch(HideGroupTitle, async (newValue) => {
+      try {
+        const doc = await this.getSetting('hideGroupTitle');
+        doc.value = newValue;
+        await this.updateSetting(doc);
+      } catch {
+        await this.addSetting({ key: 'hideGroupTitle', value: newValue });
       }
     });
   }

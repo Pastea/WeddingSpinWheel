@@ -227,6 +227,22 @@
                 />
               </div>
               <div class="col-12">
+                <label for="btn-hideGroupTitle" class="block mb-2">Hide Group Title</label>
+                <ToggleButton
+                  id="btn-hideGroupTitle"
+                  v-model="HideGroupTitle"
+                  onLabel="Hidden"
+                  offLabel="Visible"
+                  onIcon="pi pi-eye-slash"
+                  offIcon="pi pi-eye"
+                  :pt="{
+                    root: {
+                      class: 'w-full'
+                    }
+                  }"
+                />
+              </div>
+              <div class="col-12">
                 <label for="btn-fullscreen" class="block mb-2">Fullscreen</label>
                 <ToggleButton
                   v-model="isFullscreen"
@@ -332,7 +348,8 @@ import {
   LabelLength,
   CongratulationSound,
   CongratulationSounds,
-  Fairmode
+  Fairmode,
+  HideGroupTitle
 } from '@/services/SettingService';
 import { PageTitle, PageDescription, resetPageDefaults } from '@/services/PageService';
 import ItemInputGroup from '@/components/sidebar-panel/ItemInputGroup.vue';

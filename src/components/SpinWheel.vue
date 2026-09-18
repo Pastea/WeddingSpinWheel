@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="!HideGroupTitle"
     id="group-dropdown"
     class="z-1 w-full flex justify-content-center align-items-center text-center text-base sm:text-5xl md:text-6xl font-bold"
   >
@@ -37,7 +38,7 @@ import random from 'random';
 import { Wheel, type WheelProps } from 'spin-wheel';
 import { useDialog } from 'primevue/usedialog';
 import { useConfirm } from 'primevue/useconfirm';
-import { TickSound, LabelLength } from '@/services/SettingService';
+import { TickSound, LabelLength, HideGroupTitle } from '@/services/SettingService';
 import { GroupLabel, Items } from '@/services/ItemService';
 import CongratulationDialog from '@/components/CongratulationDialog.vue';
 
