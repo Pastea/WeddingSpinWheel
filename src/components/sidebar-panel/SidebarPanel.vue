@@ -242,6 +242,16 @@
                   }"
                 />
               </div>
+              <div class="col-12 mt-4">
+                <Button
+                  label="Reset Data to Defaults"
+                  icon="pi pi-trash"
+                  severity="danger"
+                  outlined
+                  class="w-full"
+                  @click="resetData"
+                />
+              </div>
             </div>
           </TabPanel>
         </TabPanels>
@@ -324,7 +334,7 @@ import {
   CongratulationSounds,
   Fairmode
 } from '@/services/SettingService';
-import { PageTitle, PageDescription } from '@/services/PageService';
+import { PageTitle, PageDescription, resetPageDefaults } from '@/services/PageService';
 import ItemInputGroup from '@/components/sidebar-panel/ItemInputGroup.vue';
 import type { IItem } from '@/interface/IItem';
 import { StringHelper } from '@/helpers/StringHelper';
@@ -485,6 +495,31 @@ const changeBulkEditMode = async () => {
 
     await itemService.cleanUpGroup(GroupLabel.value!);
     await itemService.addItems(items);
+  }
+};
+
+const resetData = ($event: Event) => {
+  if ($event.target instanceof HTMLElement) {
+    confirm.require({
+      target: $event.target || undefined,
+      message: 'Are you sure you want to delete all data and revert to default settings? This will reload the page.',
+      icon: 'pi pi-exclamation-triangle text-yellow-400',
+      accept: async () => {
+        resetPageDefaults();
+        localStorage.clear();
+        try {
+          if (window.indexedDB && window.indexedDB.databases) {
+            const dbs = await window.indexedDB.databases();
+            for (const db of dbs) {
+              if (db.name) window.indexedDB.deleteDatabase(db.name);
+            }
+          }
+        } catch (e) {
+          console.error('Failed to clear IndexedDB:', e);
+        }
+        window.location.reload();
+      }
+    });
   }
 };
 
