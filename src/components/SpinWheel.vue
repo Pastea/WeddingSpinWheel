@@ -12,7 +12,7 @@
       <img
         :src="'./img/flicker.png'"
         class="flicker"
-        :style="{ transform: `rotate(${pointerRotation}deg)` }"
+        :style="{ transform: `rotate(${pointerRotation}deg) translateZ(0)` }"
         alt="Flicker"
       />
     </div>
@@ -413,16 +413,22 @@ margin-bottom:1vh;
     width: 100%;
     height: 100%;
     object-fit: contain;
+
+    /* Force browser anti-aliasing for smooth scaling */
+    outline: 1px solid transparent;
+    backface-visibility: hidden;
   }
 
   .base-flicker {
     z-index: 0;
+    transform: translateZ(0);
     filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5)) brightness(1.3) contrast(1.15);
   }
 
   .flicker {
     z-index: 11;
     transform-origin: 50% 30%;
+    will-change: transform;
     filter: drop-shadow(0px 6px 8px rgba(0,0,0,0.6)) brightness(1.3) contrast(1.15);
   }
 }
@@ -466,6 +472,10 @@ margin-bottom:1vh;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+
+  /* Force browser anti-aliasing on fractional pixel sizes */
+  outline: 1px solid transparent;
+  backface-visibility: hidden;
   transform: translateZ(0);
 
   position: absolute;
