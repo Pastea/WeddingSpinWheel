@@ -44,6 +44,7 @@ import CongratulationDialog from '@/components/CongratulationDialog.vue';
 const patternImg = new Image();
 patternImg.src = './img/pattern.jpeg';
 patternImg.onload = () => wheel?.refresh();
+const patternImgScale = 0.3;
 
 const properties: WheelProps = {
   // debug: import.meta.env.DEV,
@@ -266,7 +267,7 @@ onMounted(() => {
       wheel!.items = (newValue || []).map((i) => ({
         ...i,
         image: patternImg,
-        imageScale: 0.2
+        imageScale: patternImgScale
       }));
       if (wheel) wheel.lineWidth = (newValue || []).length <= 1 ? 0 : 1;
       updatePinsImage();
@@ -280,7 +281,7 @@ onMounted(() => {
 
   wheel = new Wheel(container.value, {
     ...properties,
-    items: Items.value?.map((i) => ({ ...i, image: patternImg, imageScale: 0.2 })) || [],
+    items: Items.value?.map((i) => ({ ...i, image: patternImg, imageScale: patternImgScale })) || [],
     itemLabelRadiusMax: 1 - LabelLength.value,
     lineWidth: (Items.value?.length || 0) <= 1 ? 0 : 1
   });
