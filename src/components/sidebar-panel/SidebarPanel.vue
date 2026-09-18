@@ -152,6 +152,7 @@
                       optionGroupLabel="label"
                       optionGroupChildren="items"
                       class="w-full"
+                      @change="playPreviewSound($event.value, 0.3)"
                     />
                   </div>
                   <div class="col-4">
@@ -171,17 +172,18 @@
                 </div>
               </div>
               <div class="col-12">
-                <label for="dd-sound" class="block mb-2">Select a Congratulatory Sound</label>
+                <label for="dd-congratulation-sound" class="block mb-2">Select a Congratulatory Sound</label>
                 <div class="grid">
                   <div class="col-8">
                     <Select
                       v-model="CongratulationSound"
-                      inputId="dd-sound"
+                      inputId="dd-congratulation-sound"
                       :options="CongratulationSounds"
                       optionLabel="label"
                       optionGroupLabel="label"
                       optionGroupChildren="items"
                       class="w-full"
+                      @change="playPreviewSound($event.value, 1)"
                     />
                   </div>
                   <div class="col-4">
@@ -441,6 +443,19 @@ const addGroup = async () => {
   addGroupName.value = '';
 };
 
+const playPreviewSound = (
+  audioSetting: { label: string; value: string } | undefined,
+  volume: number = 1
+) => {
+  if (!audioSetting?.value) return;
+  const src = audioSetting.value.startsWith('data:')
+    ? audioSetting.value
+    : `./sound/${audioSetting.value}`;
+  const audio = new Audio(src);
+  audio.volume = volume;
+  audio.play();
+};
+
 const customBase64Uploader = async (
   event: FileUploadUploaderEvent,
   mode: 'TickSound' | 'CongratulationSound'
@@ -459,11 +474,13 @@ const customBase64Uploader = async (
         label: file.name,
         value: base64data as string
       };
+      playPreviewSound(TickSound.value, 0.3);
     } else if (mode === 'CongratulationSound') {
       CongratulationSound.value = {
         label: file.name,
         value: base64data as string
       };
+      playPreviewSound(CongratulationSound.value, 1);
     }
   };
 };
