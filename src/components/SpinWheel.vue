@@ -6,7 +6,7 @@
   >
     {{ GroupLabel }}
   </div>
-  <div ref="container" class="flex spin-container">
+  <div ref="container" class="flex spin-container" :style="{ '--wheel-scale': WheelScale }">
     <div class="pointer-container">
       <img :src="'./img/base_flicker.png'" class="base-flicker" alt="Base Flicker" />
       <img
@@ -38,7 +38,7 @@ import random from 'random';
 import { Wheel, type WheelProps } from 'spin-wheel';
 import { useDialog } from 'primevue/usedialog';
 import { useConfirm } from 'primevue/useconfirm';
-import { TickSound, LabelLength, HideGroupTitle } from '@/services/SettingService';
+import { TickSound, LabelLength, HideGroupTitle, WheelScale } from '@/services/SettingService';
 import { GroupLabel, Items } from '@/services/ItemService';
 import CongratulationDialog from '@/components/CongratulationDialog.vue';
 
@@ -371,23 +371,23 @@ margin-bottom:1vh;
 .spin-container {
   flex-shrink: 0;
   aspect-ratio: 1/1;
-  width: 130vh;
-  height: 130vh;
+  width: calc(130vh * var(--wheel-scale, 1));
+  height: calc(130vh * var(--wheel-scale, 1));
 
-  margin-top: -12vh;
+  margin-top: calc(-11vh * var(--wheel-scale, 1));
   position: relative;
   z-index: 2;
 
   @media (min-width: map.get(v.$breakpoints, 'sm')) {
-    width: 140vh;
-    height: 140vh;
-    margin-top: -28vh;
+    width: calc(140vh * var(--wheel-scale, 1));
+    height: calc(140vh * var(--wheel-scale, 1));
+    margin-top: calc(-27vh * var(--wheel-scale, 1));
   }
 
   @media (min-width: map.get(v.$breakpoints, 'md')) {
-    width: 150vh;
-    height: 150vh;
-    margin-top: -33vh;
+    width: calc(150vh * var(--wheel-scale, 1));
+    height: calc(150vh * var(--wheel-scale, 1));
+    margin-top: calc(-32vh * var(--wheel-scale, 1));
   }
 }
 
@@ -398,12 +398,12 @@ margin-bottom:1vh;
 }
 
 .pointer-container {
-  $icon-size: 10vh;
+  $icon-size: calc(10vh * var(--wheel-scale, 1));
   width: $icon-size;
   height: $icon-size;
   position: absolute;
-  top: calc(25% - 5vh);
-  left: calc(50% - 5vh);
+  top: calc(25% - calc(5vh * var(--wheel-scale, 1)));
+  left: calc(50% - calc(5vh * var(--wheel-scale, 1)));
 
  .base-flicker,
   .flicker {
@@ -444,7 +444,7 @@ margin-bottom:1vh;
 }
 
 .icon {
-  $icon-size: 13vh;
+  $icon-size: calc(13vh * var(--wheel-scale, 1));
   cursor: pointer;
 
   width: $icon-size;
@@ -469,8 +469,8 @@ margin-bottom:1vh;
   transform: translateZ(0);
 
   position: absolute;
-  top: calc(calc(50%) - calc($icon-size / 2));
-  left: calc(calc(50%) - calc($icon-size / 2));
+  top: calc(50% - calc($icon-size / 2));
+  left: calc(50% - calc($icon-size / 2));
   z-index: 10;
 
   &:hover {

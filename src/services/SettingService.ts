@@ -69,6 +69,8 @@ export const Fairmode = ref<boolean>(false);
 
 export const HideGroupTitle = ref<boolean>(false);
 
+export const WheelScale = ref<number>(1);
+
 export class SettingService {
   private db: PouchDB.Database<ISetting> = new PouchDB('setting');
 
@@ -83,6 +85,7 @@ export class SettingService {
     await this.initCongratulationSound();
     await this.initFairmode();
     await this.initHideGroupTitle();
+    await this.initWheelScale();
   };
 
   private prefetchAudio = (audioSetting: AudioSetting | undefined) => {
@@ -237,6 +240,27 @@ export class SettingService {
       }
     });
   }
+
+  private initWheelScale = async () => {
+    try {
+      WheelScale.value = (await this.getSetting('wheelScale')).value as number;
+    } catch {
+      WheelScale.value = 1;
+      this.addSetting({ key: 'wheelScale', value: WheelScale.value });
+    }
+
+    watch(WheelScale, async (newValue) => {
+      throttle(async () => {
+        try {
+          const doc = await this.getSetting('wheelScale');
+          doc.value = newValue;
+          await this.updateSetting(doc, true);
+        } catch {
+          await this.addSetting({ key: 'wheelScale', value: newValue });
+        }
+      })();
+    });
+  };
 
   public getSettings = async (): Promise<PouchDB.Core.ExistingDocument<ISetting>[]> =>
     (await this.db.allDocs<ISetting>({ include_docs: true })).rows.map((row) => row.doc!);

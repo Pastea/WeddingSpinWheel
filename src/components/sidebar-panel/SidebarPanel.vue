@@ -243,6 +243,16 @@
                 />
               </div>
               <div class="col-12">
+                <label for="sl-wheelScale" class="block mb-2">Wheel Size Scale</label>
+                <Slider
+                  v-model="WheelScale"
+                  inputId="sl-wheelScale"
+                  :min="0.5"
+                  :max="1.5"
+                  :step="0.01"
+                />
+              </div>
+              <div class="col-12">
                 <label for="btn-fullscreen" class="block mb-2">Fullscreen</label>
                 <ToggleButton
                   v-model="isFullscreen"
@@ -349,7 +359,8 @@ import {
   CongratulationSound,
   CongratulationSounds,
   Fairmode,
-  HideGroupTitle
+  HideGroupTitle,
+  WheelScale
 } from '@/services/SettingService';
 import { PageTitle, PageDescription, resetPageDefaults } from '@/services/PageService';
 import ItemInputGroup from '@/components/sidebar-panel/ItemInputGroup.vue';
