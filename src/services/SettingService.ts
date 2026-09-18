@@ -67,7 +67,7 @@ export const LabelLength = ref<number>(0.75);
 
 export const Fairmode = ref<boolean>(false);
 
-export const HideGroupTitle = ref<boolean>(false);
+export const HideGroupTitle = ref<boolean>(true);
 
 export const WheelScale = ref<number>(1);
 
@@ -226,8 +226,8 @@ export class SettingService {
     try {
       HideGroupTitle.value = (await this.getSetting('hideGroupTitle')).value as boolean;
     } catch {
-      HideGroupTitle.value = false;
-      this.addSetting({ key: 'hideGroupTitle', value: false });
+      HideGroupTitle.value = true;
+      this.addSetting({ key: 'hideGroupTitle', value: true });
     }
 
     watch(HideGroupTitle, async (newValue) => {
