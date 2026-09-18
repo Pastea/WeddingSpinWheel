@@ -55,12 +55,5 @@ export const templateItems = [
     label: 'BRINDISI',
     weight: 1,
     order: 8
-  },
-
-  {
-    group: 'La miglior ruota',
-    label: 'Il fratello della sposa che si chiama Francesco beve',
-    weight: 20,
-    order: 0
   }
 ];
